@@ -38,11 +38,11 @@ $(GOLANGCI_LINT):
 
 $(TEST_RUNNER):
 	@echo ">> Couldn't find $(TEST_RUNNER); installing ..."
-	@GOPATH=$(DEFAULT_GOPATH) \
+	GOPATH=$(DEFAULT_GOPATH) \
 	GOBIN=$(DEFAULT_GOBIN) \
 	GO111MODULE=on \
-	$(GO) get -u get gotest.tools/gotestsum && \
-	$(GO) get -u install gotest.tools/gotestsum
+	$(GO) get gotest.tools/gotestsum && \
+	$(GO) install gotest.tools/gotestsum
 
 $(GODA):
 	@echo ">> Couldn't find $(GODA); installing ..."
