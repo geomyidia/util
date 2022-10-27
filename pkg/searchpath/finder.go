@@ -5,8 +5,9 @@ import (
 	"path/filepath"
 )
 
-func FindFile(filename string, opts *Options) (string, error) {
-	return findFile(filename, opts.Paths)
+func FindFile(filename string, opts ...Option) (string, error) {
+	options := ParseOptions(opts)
+	return findFile(filename, options.Paths)
 }
 
 // Support functions

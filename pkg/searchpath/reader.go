@@ -4,23 +4,8 @@ import (
 	"os"
 )
 
-const (
-	defaultPathSeparator = ":"
-)
-
-var (
-	defaultPaths = []string{"."}
-)
-
 func ReadFile(filename string, opts ...Option) ([]byte, error) {
-	options := &Options{
-		PathSeparator: defaultPathSeparator,
-		Paths:         defaultPaths,
-	}
-	for _, opt := range opts {
-		opt(options)
-	}
-	fullpath, err := FindFile(filename, options)
+	fullpath, err := FindFile(filename, opts...)
 	if err != nil {
 		return nil, err
 	}
