@@ -84,11 +84,14 @@ func TestReadFilePathSep(t *testing.T) {
 	assert.NoError(t, err)
 	require.NotNil(t, bytes)
 	assert.True(t, len(bytes) > 0)
-	opts = []searchpath.Option{
+}
+
+func TestReadFilePathSepMismatch(t *testing.T) {
+	opts := []searchpath.Option{
 		searchpath.WithSeparator("!"),
 		searchpath.WithPathStr("../version:../filesystem"),
 	}
-	bytes, err = searchpath.ReadFile("caller.go", opts...)
+	bytes, err := searchpath.ReadFile("caller.go", opts...)
 	assert.Error(t, err)
 	assert.Nil(t, bytes)
 	assert.Equal(t, searchpath.ErrNotFound, err)
