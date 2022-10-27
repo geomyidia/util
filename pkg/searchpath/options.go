@@ -4,6 +4,14 @@ import (
 	"strings"
 )
 
+const (
+	defaultPathSeparator = ":"
+)
+
+var (
+	defaultPaths = []string{"."}
+)
+
 type Option func(*Options)
 
 type Options struct {
@@ -34,4 +42,15 @@ func WithSeparator(sep string) Option {
 	return func(opts *Options) {
 		opts.PathSeparator = sep
 	}
+}
+
+func ParseOptions(opts []Option) *Options {
+	options := &Options{
+		PathSeparator: defaultPathSeparator,
+		Paths:         defaultPaths,
+	}
+	for _, opt := range opts {
+		opt(options)
+	}
+	return options
 }
