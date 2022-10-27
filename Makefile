@@ -10,29 +10,29 @@ DEFAULT_GOBIN=$(DEFAULT_GOPATH)/bin
 export PATH:=$(PATH):$(DEFAULT_GOBIN)
 
 GOLANGCI_LINT=$(DEFAULT_GOBIN)/golangci-lint
-RICH_GO = $(DEFAULT_GOBIN)/richgo
 
-GODOC=godoc -index -links=true -notes="BUG|TODO|XXX|ISSUE"
+GODOC=godoc -index -links=true -notes="BUG|TODO|XXX|ISSUE|FIXME"
 
 #############################################################################
 ###   Custom Installs   #####################################################
 #############################################################################
 
 GOLANGCI_LINT = $(DEFAULT_GOBIN)/golangci-lint
-RICH_GO = $(DEFAULT_GOBIN)/richgo
+TEST_RUNNER = $(DEFAULT_GOBIN)/gotestsum
 GODA = $(DEFAULT_GOBIN)/goda
 
 $(GOLANGCI_LINT):
 	@echo ">> Couldn't find $(GOLANGCI_LINT); installing ..."
 	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | \
-	sh -s -- -b $(DEFAULT_GOBIN) v1.21.0
+	sh -s -- -b $(DEFAULT_GOBIN) v1.50.1
 
-$(RICH_GO):
-	@echo ">> Couldn't find $(RICH_GO); installing ..."
+$(TEST_RUNNER):
+	@echo ">> Couldn't find $(TEST_RUNNER); installing ..."
 	@GOPATH=$(DEFAULT_GOPATH) \
 	GOBIN=$(DEFAULT_GOBIN) \
 	GO111MODULE=on \
-	$(GO) get -u github.com/kyoh86/richgo
+	$(GO) get -u get gotest.tools/gotestsum && \
+	$(GO) get -u install gotest.tools/gotestsum
 
 $(GODA):
 	@echo ">> Couldn't find $(GODA); installing ..."
@@ -51,7 +51,7 @@ show-linter:
 lint-silent: $(GOLANGCI_LINT)
 	@$(GOLANGCI_LINT) \
 	--enable=typecheck \
-	--enable=golint \
+	--enable=revive \
 	--enable=gocritic \
 	--enable=misspell \
 	--enable=nakedret \
@@ -65,9 +65,9 @@ lint:
 	@echo '>> Linting source code'
 	@GO111MODULE=on $(MAKE) lint-silent
 
-test: $(RICH_GO)
+test: $(TEST_RUNNER)
 	@echo '>> Running all tests'
-	@GO111MODULE=on $(RICH_GO) test ./... -v
+	@GO111MODULE=on $(TEST_RUNNER) --format testname -- ./...
 
 test-nocolor:
 	@echo '>> Running all tests'
