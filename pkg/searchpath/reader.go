@@ -24,11 +24,15 @@ func ReadFile(filename string, opts ...Option) ([]byte, error) {
 	for _, opt := range opts {
 		opt(options)
 	}
-	fullpath, err := findFile(filename, options.Paths)
+	fullpath, err := FindFile(filename, options)
 	if err != nil {
 		return nil, err
 	}
 	return os.ReadFile(fullpath)
+}
+
+func FindFile(filename string, opts Options) (string, error) {
+	return findFile(filename, opts.Paths)
 }
 
 // Support functions
