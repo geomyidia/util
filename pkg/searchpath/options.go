@@ -44,11 +44,15 @@ func WithSeparator(sep string) Option {
 	}
 }
 
-func ParseOptions(opts []Option) *Options {
-	options := &Options{
+func DefaultOptions() *Options {
+	return &Options{
 		PathSeparator: defaultPathSeparator,
 		Paths:         defaultPaths,
 	}
+}
+
+func ParseOptions(opts []Option) *Options {
+	options := DefaultOptions()
 	for _, opt := range opts {
 		opt(options)
 	}
