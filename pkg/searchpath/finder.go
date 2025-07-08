@@ -1,3 +1,5 @@
+// Package searchpath provides functionality to find files in specified directories.
+// It allows searching for files in a list of paths, which can be specified as a string
 package searchpath
 
 import (
@@ -7,6 +9,7 @@ import (
 	"github.com/geomyidia/util/pkg/errors"
 )
 
+// FindFile searches for a file in the specified search paths and returns its full path.
 func FindFile(filename string, opts ...Option) (string, error) {
 	options := ParseOptions(opts)
 	return findFile(filename, options.Paths)

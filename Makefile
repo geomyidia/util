@@ -32,9 +32,9 @@ TEST_RUNNER = $(DEFAULT_GOBIN)/gotestsum
 GODA = $(DEFAULT_GOBIN)/goda
 
 $(GOLANGCI_LINT):
-	@echo ">> Couldn't find $(GOLANGCI_LINT); installing ..."
-	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | \
-	sh -s -- -b $(DEFAULT_GOBIN) v1.50.1
+	@echo "Couldn't find $(GOLANGCI_LINT); installing ..."
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | \
+	sh -s -- -b $(DEFAULT_GOBIN) v2.2.1
 
 $(TEST_RUNNER):
 	@echo ">> Couldn't find $(TEST_RUNNER); installing ..."
@@ -59,21 +59,33 @@ show-linter:
 	@echo $(GOLANGCI_LINT)
 
 lint-silent: $(GOLANGCI_LINT)
-	@$(GOLANGCI_LINT) \
-	--enable=typecheck \
+	@$(GOLANGCI_LINT) run \
+	--enable=errcheck \
+	--enable=dupl \
+	--enable=unparam \
+	--enable=wastedassign \
+	--enable=ineffassign \
 	--enable=revive \
 	--enable=gocritic \
 	--enable=misspell \
-	--enable=nakedret \
 	--enable=unparam \
 	--enable=lll \
 	--enable=goconst \
-	--out-format=colored-line-number \
-	run ./...
+	--enable=govet \
+	--show-stats \
+	./...
 
 lint:
 	@echo '>> Linting source code'
+	@echo "($$($(GOLANGCI_LINT) --version))"
 	@GO111MODULE=on $(MAKE) lint-silent
+
+lint-help: $(GOLANGCI_LINT)
+	@$(GOLANGCI_LINT) --help
+	@$(GOLANGCI_LINT) run --help
+
+show-linters: $(GOLANGCI_LINT)
+	@$(GOLANGCI_LINT) linters
 
 test: $(TEST_RUNNER)
 	@echo '>> Running all tests'

@@ -1,3 +1,4 @@
+// Package filesystem provides utilities for working with file paths and directories.
 package filesystem
 
 import (
@@ -24,7 +25,7 @@ type CallerTree struct {
 // strings.HasSuffix(paths.DotDotPath, "/github.com/MediaMath/identity-common")
 // strings.HasSuffix(paths.DotDotDotPath, "/github.com/MediaMath")
 // strings.HasSuffix(paths.DotDotDotDotPath, "/github.com")
-func CallerPaths(pc uintptr, file string, line int, ok bool) *CallerTree {
+func CallerPaths(_ uintptr, file string, _ int, ok bool) *CallerTree {
 	if !ok {
 		log.Warn("Couldn't find caller")
 		return &CallerTree{}
