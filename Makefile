@@ -83,6 +83,11 @@ test-nocolor:
 	@echo '>> Running all tests'
 	@GO111MODULE=on $(GO) test ./... -v
 
+upgrade-deps:
+	@echo ">> Upgrading Go module dependencies ..."
+	@go get -u ./...
+	@go mod tidy
+
 #############################################################################
 ###   Release Process   #####################################################
 #############################################################################
