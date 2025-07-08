@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/geomyidia/util/pkg/errors"
 	"github.com/geomyidia/util/pkg/searchpath"
 )
 
@@ -20,7 +21,7 @@ func TestReadFileNotFound(t *testing.T) {
 	bytes, err := searchpath.ReadFile("no-such-file")
 	assert.Error(t, err)
 	assert.Nil(t, bytes)
-	assert.Equal(t, searchpath.ErrNotFound, err)
+	assert.Equal(t, errors.ErrFileNotFoundAny, err)
 }
 
 func TestReadFileStringPaths(t *testing.T) {
@@ -94,9 +95,9 @@ func TestReadFilePathSepMismatch(t *testing.T) {
 	bytes, err := searchpath.ReadFile("caller.go", opts...)
 	assert.Error(t, err)
 	assert.Nil(t, bytes)
-	assert.Equal(t, searchpath.ErrNotFound, err)
+	assert.Equal(t, errors.ErrFileNotFoundAny, err)
 	bytes, err = searchpath.ReadFile("util.go", opts...)
 	assert.Error(t, err)
 	assert.Nil(t, bytes)
-	assert.Equal(t, searchpath.ErrNotFound, err)
+	assert.Equal(t, errors.ErrFileNotFoundAny, err)
 }

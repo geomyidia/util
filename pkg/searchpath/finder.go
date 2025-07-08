@@ -3,6 +3,8 @@ package searchpath
 import (
 	"os"
 	"path/filepath"
+
+	"github.com/geomyidia/util/pkg/errors"
 )
 
 func FindFile(filename string, opts ...Option) (string, error) {
@@ -20,5 +22,5 @@ func findFile(filename string, paths []string) (string, error) {
 			return fullpath, nil
 		}
 	}
-	return "", ErrNotFound
+	return "", errors.ErrFileNotFoundAny
 }
